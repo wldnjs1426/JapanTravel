@@ -15,7 +15,7 @@ const Div = styled.div`
 `
 const DetailDiv = styled.div`
     width: 50%;
-    height: 99%;
+    height: 90%;
     background-color: white;
 `
 const Section = styled.section`
@@ -106,7 +106,7 @@ const Td = styled.td`
 const ListDiv = styled.div`
     width: 90%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 `
 const MapDiv = styled.div`
     width:50%;
@@ -119,6 +119,21 @@ const FooterDiv = styled.div`
     margin-top:20px;
     width:99%;
     height:150px;
+`
+const Button = styled.button`
+    box-shadow:inset 0px 1px 0px 0px #cf866c;
+    background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+    background-color:#d0451b;
+    border-radius:3px;
+    border:1px solid #942911;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:12px;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #854629;
 `
 function DetailPage({match}) {
 
@@ -139,7 +154,7 @@ function DetailPage({match}) {
     }
 
     useEffect(()=>{
-        Axios.get('http://192.168.0.2:8000/detail',{
+        Axios.get('http://127.0.0.1:8000/detail',{
         params: {
             id: id,
             Category: category
@@ -149,7 +164,7 @@ function DetailPage({match}) {
         }).catch((error) =>{
             console.log(error)
         })
-        Axios.get('http://192.168.0.2:8000/detailC',{
+        Axios.get('http://127.0.0.1:8000/detailC',{
         params: {
             id: id,
             Category: category
@@ -157,7 +172,7 @@ function DetailPage({match}) {
         }).then((response)=>{
             setcategoryData(response.data);
         })
-        Axios.get('http://192.168.0.2:8000/detailA',{
+        Axios.get('http://127.0.0.1:8000/detailA',{
         params: {
             Area: area
         }
@@ -233,8 +248,11 @@ return(
                             </Li>
                         </Ul>
                         <ListDiv>
+                            <Link to={`/admin/${match.params.id}/${match.params.category}`}>
+                                <Button>수정</Button>
+                            </Link>
                             <Link to={`/map/${match.params.category}`}>
-                                <button>목록</button>
+                                <Button>목록</Button>
                             </Link>
                         </ListDiv>
                     </TextDiv>
@@ -245,7 +263,7 @@ return(
             </DetailDiv>
         ))}
         {detailData.map(data =>(
-            <MapDiv>
+            <MapDiv key={data.id}>
                 <DetailMap lat={data.coordinate_lat} lng={data.coordinate_lng} name={data.name} />
             </MapDiv>
         ))}

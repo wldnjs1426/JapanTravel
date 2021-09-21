@@ -26,7 +26,6 @@ function Map(props){
     setMapCenter(center)
     setZoom(16)
   }
-
     return (
 
       <Div>

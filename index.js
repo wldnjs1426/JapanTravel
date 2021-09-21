@@ -1,24 +1,26 @@
 const express = require('express');
+const router = require('express').Router();
+const multer = require('multer');
 const app = express();
+const path = require("path");
 const cors = require('cors');
 const mysql = require('mysql');
 const PORT = process.env.port || 8000;
 
 //DB접속
 const db = mysql.createPool({
-    host: "127.0.0.1",
-    user: "JAPAN",
-    password: "1426",
+    host: "3.38.97.219",
+    user: "root",
+    password: "rose1991",
     database: "japan"
 });
+
 
 
 app.use(cors());
 app.use(express.json());
 //DB데이터 파싱
 app.use(express.urlencoded({ extended: false }))
-
-
 
 
 
@@ -61,31 +63,79 @@ app.get("/tour", (req, res)=>{
 
     let sqlQuery ;
     if(Area == "null"){
-        sqlQuery = "SELECT *,(SELECT DETAIL_NM FROM tourlist_code  WHERE detail_cd = TU.AREA) AS detail_nm FROM "+Category+" TU";
+        sqlQuery = "SELECT *,(SELECT DETAIL_NM FROM tourlist_code  WHERE detail_cd = TU.AREA) AS detail_nm FROM "+Category+" TU WHERE del_yn='Y'";
     }else{
-        sqlQuery = "SELECT *,(SELECT DETAIL_NM FROM tourlist_code  WHERE detail_cd = TU.AREA) AS detail_nm FROM "+Category+" TU WHERE Area='"+Area+"'";
+        sqlQuery = "SELECT *,(SELECT DETAIL_NM FROM tourlist_code  WHERE detail_cd = TU.AREA) AS detail_nm FROM "+Category+" TU WHERE Area='"+Area+"' AND del_yn='Y'" ;
 
     }
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
-        console.log(err);
     });
 })
 //지역 데이터 쿼리
 app.get("/tour/Area", (req, res)=>{
-    const sqlQuery = "SELECT * FROM TOURLIST_CODE";
+    const sqlQuery = "SELECT * FROM tourlist_code";
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
-        console.log(result)
     });
 })
 //카테고리 데이터 쿼리
 app.get("/tour/Category", (req, res)=>{
-    const sqlQuery = "SELECT * FROM JAPAN_CODE";
+    const sqlQuery = "SELECT * FROM japan_code";
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
     });
 })
+
+
+
+const storage = multer.diskStorage({
+    destination: "./public/image/Thumbnail_img",
+    filename: function(req, file, cb) {
+        var testFolder = './public/image/Thumbnail_img';
+        var fs = require('fs');
+
+        fs.readdir(testFolder, function(error, filelist){
+            cb(null, "ThumbNail" +Number(filelist.length+1) + path.extname(file.originalname));
+        })
+            
+    }
+});
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 }
+});
+
+app.post("/Create",upload.single("img"),(req,res)=>{
+    
+    var fs = require('fs');
+    var testFolder = './public/image/Thumbnail_img';
+
+    fs.readdir(testFolder, function(error, filelist){
+
+        var category ;
+        var lat = Number(req.body.coordinate_lat)
+        var lng = Number(req.body.coordinate_lng)
+        if(req.body.contents ==="CA01"){
+            category = "tourlist"
+        }else if(req.body.contents ==="CA02"){
+            category = "food"
+        }else{
+            category = "shopping"
+        }
+        let sqlQuery
+        if(req.body.id === undefined){
+            sqlQuery = "INSERT INTO `"+category+"` (`Area`, `Japan_name`, `name`, `Thumbnail_img`, `Thumbnail_text`, `Address`, `Detail_text`, `coordinate_lat`, `coordinate_lng`, `phone_number`, `Opening_hours`, `Category_code`) VALUES ('"+req.body.area+"', '"+req.body.japan_name+"', '"+req.body.name+"', '/image/Thumbnail_img/ThumbNail"+Number(filelist.length+1)+".jpg', '"+req.body.Thumbnail_text+"', '"+req.body.address+"', '"+req.body.detail_text+"',"+lat+","+lng+", '"+req.body.tel+"', '"+req.body.opening+"-"+req.body.closing+"', '"+req.body.contents+"')"
+        }else{
+            sqlQuery = "UPDATE "+category+" SET Area = '"+req.body.area+"', Japan_name = '"+req.body.japan_name+"', name = '"+req.body.name+"', Thumbnail_img = '/image/Thumbnail_img/"+Number(filelist.length+1)+".jpg', Thumbnail_text = '"+req.body.Thumbnail_text+"', Address = '"+req.body.address+"', Detail_text = '"+req.body.detail_text+"', coordinate_lat = "+lat+", coordinate_lng = "+lng+", phone_number = '"+req.body.tel+"', Opening_hours ='"+req.body.opening+"-"+req.body.closing+"', Category_code = '"+req.body.contents+"' WHERE id = "+req.body.id+""
+        }
+        db.query(sqlQuery, (err, result)=>{
+            res.send(result);
+        });
+    })
+})
+
+
 
 app.listen(PORT, ()=>{
     console.log(`running on port ${PORT}`);
