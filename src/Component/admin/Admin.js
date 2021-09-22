@@ -68,6 +68,7 @@ function Admin({match}){
             Axios.post('http://127.0.0.1:8000/Create',data
             ).then((res) => {
                 alert("성공")
+                window.location.href='http://127.0.0.1:3000/map/tourlist'
             }).catch((err) => {
                 alert("Error")
             });

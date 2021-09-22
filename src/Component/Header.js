@@ -101,11 +101,11 @@ function Header(){
 
   const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
-
+      setLoginModal();
       Axios.post('http://127.0.0.1:8000/login',data
             ).then((res) => {
               const token = res.data;
- 
+              window.location.reload()
               cookies.set('token', token, { path: '/' });
               
               console.log();
