@@ -6,6 +6,7 @@ import Loading from './Loading';
 import { useForm } from "react-hook-form";
 import { Link,useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import Cookies from 'universal-cookie';
 import styled from "styled-components";
 import Footer from './Footer';
 
@@ -115,8 +116,14 @@ import Footer from './Footer';
     font-weight: 550;
   `
   const PageLi = styled.li`
+    display:flex;  
     justify-content: center;
-    border: none;
+    align-items: center;
+  `
+  const ButtonDiv = styled.div`
+    display:flex;  
+    justify-content: flex-end;
+    margin-bottom:10px;
   `
   const ImgDiv = styled.div`
     width:20%;
@@ -153,13 +160,27 @@ import Footer from './Footer';
     height:150px;
     margin:0 auto;
 `
+  const Button = styled.button`
+      box-shadow:inset 0px 1px 0px 0px #cf866c;
+      background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+      background-color:#d0451b;
+      border-radius:3px;
+      border:1px solid #942911;
+      display:inline-block;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:12px;
+      padding:6px 24px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #854629;
+  `
  
  function MapSub() {
 
   const MapMemo = React.memo(Map)
   const NavMemo = React.memo(Nav)
-
-  
+  const cookies = new Cookies();
   const [loadingList, setLoadingList] = useState(true);
 
   setTimeout(()=>setLoadingList(false),2000)
@@ -320,6 +341,15 @@ return(
                     Areadata={totalposts} 
                   />
                 </PageLi>
+                {cookies.get('token') === undefined ? <></> : <ButtonDiv>
+                <Link to={`/admin/false/false`}>
+                    <Button>글쓰기</Button>
+                </Link>
+                </ButtonDiv>}
+                
+
+                
+                
               </Ul>
               <FooterDiv>
                 <Footer />

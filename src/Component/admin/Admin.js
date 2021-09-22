@@ -8,21 +8,24 @@ const Wrap = styled.div`
     width: 1hr;
     height: 100vh;
     display: flex;
+    background-color:#ececec;
     flex-direction: column;
-    justify-content:flex-end;
+    justify-content:center;
     align-items: center;
 `
 const Container = styled.div`
     width:50%;
-    height:80%;
-    border:1px solid black;
+    border:1px solid gray;
     display:flex;
     justify-content:center;
+    
+    background-color:white;
 `
 const Form = styled.form`
 `
 const Table = styled.table`
     width:100%;
+    height:550px;
     border-collapse: collapse
 `
 const Tr = styled.tr`
@@ -50,26 +53,39 @@ function Admin({match}){
     }
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
+        var nullCheck = true
+        var ObjectData = Object.values(data)
+
+        for(var i=0 ; i<ObjectData.length ; i++){
+            if(ObjectData[i] === ""){
+                nullCheck = false
+            }
+        }
+
         const formData = new FormData();
         formData.append("img", data.Thumbnail_img[0]);
-        
-        Axios.post('http://127.0.0.1:8000/Create',data
-        ).then((res) => {
-            alert("성공")
-        }).catch((err) => {
-            alert("Error")
-        });
-        Axios.post('http://127.0.0.1:8000/Create',formData
-        ).then((res) => {
+        if(nullCheck){
+            Axios.post('http://127.0.0.1:8000/Create',data
+            ).then((res) => {
+                alert("성공")
+            }).catch((err) => {
+                alert("Error")
+            });
+            Axios.post('http://127.0.0.1:8000/Create',formData
+            ).then((res) => {
 
-        }).catch((err) => {
+            }).catch((err) => {
 
-        });
+            });
+        }else{
+            alert("빈칸 없이 입력해주세요")
+        }
+
     }
     return(
         <Wrap>
             <h1>
-                {data === null ? "데이터 작성" : "데이터 수정"}
+                {data === null ? "게시글 작성" : "게시글 수정"}
             </h1>
             <Container>
                 <Form onSubmit={handleSubmit(onSubmit)}>
@@ -78,13 +94,13 @@ function Admin({match}){
                         <tbody>
                             {data === null ? <></>  :
                                 <Tr>
-                                    <TitleTd>-컨텐츠 ID</TitleTd>
+                                    <TitleTd>-게시글 ID</TitleTd>
                                     <Td colSpan="2">{data.id}</Td>
                                     <Td><Input type = "text" name = "id" value={data.id} {...register("id")}/></Td>    
                                 </Tr>}
                             <Tr>
                                 <TitleTd>
-                                    - 컨텐츠 
+                                    - 카테고리 
                                 </TitleTd>
                                 <Td>
                                     <select name="contents" {...register("contents")}>

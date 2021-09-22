@@ -1,5 +1,6 @@
 const express = require('express');
-const router = require('express').Router();
+const jwt = require('jsonwebtoken');
+const KEY = "test_key";
 const multer = require('multer');
 const app = express();
 const path = require("path");
@@ -86,9 +87,29 @@ app.get("/tour/Category", (req, res)=>{
         res.send(result);
     });
 })
+//게시물 삭제
+app.get("/delete", (req, res)=>{
+    var id = req.query.id;
+    var category = req.query.category
+    const sqlQuery = "UPDATE "+category+" SET del_yn = 'N' WHERE id="+id+"";
+    db.query(sqlQuery, (err, result)=>{
+        res.send(result);
+    });
+})
 
+//로그인
+app.post("/login", (req, res)=>{
+    var id = req.body.id;
+    var password = req.body.password;
+    const sqlQuery = "SELECT * FROM login WHERE id='"+id+"' AND password="+password+"";
+    db.query(sqlQuery, (err, result)=>{
+        let token = jwt.sign({ name: 'admin', exp: parseInt(Date.now() / 1000) + (60 * 60) }, KEY); // 만료기간 10초
+	    res.send(token);
+        
+    });
+})
 
-
+//이미지 파일 업로드
 const storage = multer.diskStorage({
     destination: "./public/image/Thumbnail_img",
     filename: function(req, file, cb) {

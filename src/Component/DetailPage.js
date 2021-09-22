@@ -6,6 +6,8 @@ import DetailMap from './DetailMap';
 import Nav from './Nav';
 import styled from "styled-components";
 import Footer from './Footer';
+import Cookies from 'universal-cookie';
+
 
 const Div = styled.div`
     display: flex;
@@ -135,6 +137,11 @@ const Button = styled.button`
     text-decoration:none;
     text-shadow:0px 1px 0px #854629;
 `
+const ButtonDiv = styled.div`
+    display:flex;
+    justify-content:space-around;
+    width:170px;
+`
 function DetailPage({match}) {
 
     const [detailData,setdetailData] = useState([]);
@@ -143,6 +150,10 @@ function DetailPage({match}) {
     const category = match.params.category
     const id = match.params.id
     const area = match.params.Area
+    const cookies = new Cookies();
+
+    console.log(cookies.get('token'))
+
 
     let CategoryKorea 
     if(category === "tourlist"){
@@ -151,6 +162,19 @@ function DetailPage({match}) {
         CategoryKorea = "음식점"
     }else{
         CategoryKorea = "쇼핑몰"
+    }
+
+    const deleteAction = ()=>{
+        Axios.get('http://127.0.0.1:8000/delete',{
+        params: {
+            id: id,
+            category: category
+        }
+        }).then( ()=>{
+            alert("삭제 되었습니다.")
+            window.location.href = "http://127.0.0.1:3000/map/tourlist";
+
+        })
     }
 
     useEffect(()=>{
@@ -248,9 +272,15 @@ return(
                             </Li>
                         </Ul>
                         <ListDiv>
-                            <Link to={`/admin/${match.params.id}/${match.params.category}`}>
-                                <Button>수정</Button>
-                            </Link>
+                        {cookies.get('token') === undefined ? `<></>` : <ButtonDiv>
+                                <Link to={`/admin/${match.params.id}/${match.params.category}`}>
+                                    <Button>수정</Button>
+                                </Link>
+                                <Button onClick={()=>deleteAction()}>삭제</Button>
+                            </ButtonDiv>}
+                            
+                            
+                            
                             <Link to={`/map/${match.params.category}`}>
                                 <Button>목록</Button>
                             </Link>
