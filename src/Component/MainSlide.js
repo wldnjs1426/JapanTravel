@@ -1,6 +1,7 @@
 import React  from 'react';
 import { useState } from "react"
 import styled from "styled-components";
+import UseInterval from './UseInterval';
 
 
 const WrapDiv = styled.div`
@@ -78,12 +79,20 @@ function MainSlide(props){
         }
         setLeftvalue(copyList)
     }
+    //auto slide
+    const [isRunning,setIsRunning] = useState(true)
 
+        UseInterval(() => {
+            Move(800+"px")
+        }, isRunning ? 4000 : null);
+    
+        
+    
 
     return(
-        <>
-            <WrapDiv menu={props.toggle} >
-                    <IframeDiv>  
+        <> 
+            <WrapDiv onMouseOver={()=>setIsRunning(false)} onMouseOut={()=>setIsRunning(true)} menu={props.toggle} >
+                    <IframeDiv >  
                         {iframeList.map((data,index) => (
                             <SlideDiv 
                                 key={index} 

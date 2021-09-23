@@ -50,15 +50,12 @@ function MainSub(){
 
     //Axios로 데이터베이스 접근 
     useEffect(()=>{
-        Axios.get('http://192.168.0.2:8000/tour/Category').then((response)=>{
+        Axios.get('http://127.0.0.1:8000/tour/Category').then((response)=>{
     //가져온 데이터를 Category 데이터로 선언
         setCategory(response.data);
     })
     },[])
 
-
-    //iframe option
-    
     return(
             <Div>
                 <MainSlide />

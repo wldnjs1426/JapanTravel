@@ -6,6 +6,7 @@ import Loading from './Loading';
 import { useForm } from "react-hook-form";
 import { Link,useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import Cookies from 'universal-cookie';
 import styled from "styled-components";
 import Footer from './Footer';
 
@@ -26,7 +27,6 @@ import Footer from './Footer';
     background-color: white;
   `
   const SearchSection = styled.section`
-    background-color: white;
     width: 100%;
     height: 30%;
     display:flex;
@@ -44,6 +44,7 @@ import Footer from './Footer';
     width: 30%;
     height: 100%;
     display: flex;
+    border-right:1px solid #ececec;
     align-items: center;
     margin-left: 20px;    
   `
@@ -56,12 +57,22 @@ import Footer from './Footer';
   `
   const Select = styled.select`
     width: 200px;
-    height: 50px;
+    padding: .8em .5em; 
+    border: 1px solid #999;
+    font-size:11px;
+    font-family: inherit;  
+    background: url('/image/icon/arrow.png') no-repeat 95% 50%; 
+    background-size: 12px 12px;
+    border-radius: 5px; 
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
   `
   const SubmitDiv = styled.div`
     width: 100%;
     height: 15%;
     margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,8 +116,14 @@ import Footer from './Footer';
     font-weight: 550;
   `
   const PageLi = styled.li`
+    display:flex;  
     justify-content: center;
-    border: none;
+    align-items: center;
+  `
+  const ButtonDiv = styled.div`
+    display:flex;  
+    justify-content: flex-end;
+    margin-bottom:10px;
   `
   const ImgDiv = styled.div`
     width:20%;
@@ -123,18 +140,47 @@ import Footer from './Footer';
     right:0;
     bottom:0;
   `
+  const Input = styled.input`
+    box-shadow:inset 0px 1px 0px 0px #cf866c;
+    background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+    background-color:#d0451b;
+    border-radius:3px;
+    border:1px solid #942911;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-size:12px;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #854629;
+  `
   const FooterDiv = styled.div`
     margin-top:20px;
     width:99%;
     height:150px;
+    margin:0 auto;
 `
+  const Button = styled.button`
+      box-shadow:inset 0px 1px 0px 0px #cf866c;
+      background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+      background-color:#d0451b;
+      border-radius:3px;
+      border:1px solid #942911;
+      display:inline-block;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:12px;
+      padding:6px 24px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #854629;
+  `
  
  function MapSub() {
 
   const MapMemo = React.memo(Map)
   const NavMemo = React.memo(Nav)
-
-  
+  const cookies = new Cookies();
   const [loadingList, setLoadingList] = useState(true);
 
   setTimeout(()=>setLoadingList(false),2000)
@@ -173,7 +219,7 @@ import Footer from './Footer';
     
   //DB연동 후 조건에 맞는 쿼리문 입력 후 데이터 출력
   useEffect(()=>{
-    Axios.get('http://192.168.0.2:8000/tour',{
+    Axios.get('http://127.0.0.1:8000/tour',{
       params: {
         Area: Search.Area,
         Category: Search.Category
@@ -189,10 +235,10 @@ import Footer from './Footer';
 
   //지역,카테고리 select 박스 동적 생성
   useEffect(()=>{
-    Axios.get('http://192.168.0.2:8000/tour/Area').then((response)=>{
+    Axios.get('http://127.0.0.1:8000/tour/Area').then((response)=>{
         setArcd(response.data);        
     })
-    Axios.get('http://192.168.0.2:8000/tour/Category').then((response)=>{
+    Axios.get('http://127.0.0.1:8000/tour/Category').then((response)=>{
       setCacd(response.data);
     })
       
@@ -265,7 +311,7 @@ return(
                 </SubArticle>
               </SubSection>
               <SubmitDiv>
-                <input type="submit" value="검색" />
+                <Input type="submit" value="검색" />
               </SubmitDiv>
             </SearchSection>
             
@@ -295,6 +341,15 @@ return(
                     Areadata={totalposts} 
                   />
                 </PageLi>
+                {cookies.get('token') === undefined ? <></> : <ButtonDiv>
+                <Link to={`/admin/false/false`}>
+                    <Button>글쓰기</Button>
+                </Link>
+                </ButtonDiv>}
+                
+
+                
+                
               </Ul>
               <FooterDiv>
                 <Footer />
