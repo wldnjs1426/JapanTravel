@@ -113,7 +113,7 @@ function Header(){
       Axios.post('http://127.0.0.1:8000/login',data
             ).then((res) => {
               if(res.data === false){
-                alert("아이디와 비밀번호를 확인해주세요")
+                alert("아이디와 비밀번호를 입력해주세요")
               }else{
                 const token = res.data;
                 window.location.reload()

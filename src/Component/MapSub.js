@@ -226,7 +226,7 @@ import Footer from './Footer';
         Category: Search.Category
       }
     }).then((response)=>{
-        setTimeout(()=>setLoadingList(false),2000)
+      setTimeout(()=>setLoadingList(false),2000)
         settotalposts(response.data);
         const indexOfLast = currentPage * postsPerPage;
         const indexOfFirst = indexOfLast - postsPerPage;
