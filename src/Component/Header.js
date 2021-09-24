@@ -94,21 +94,32 @@ function Header(){
 
   const cookies = new Cookies();
   const [login,setLogin] = useState(false)
+  const [loginAdmin,setloginAdmin] = useState()
 
-  const setLoginModal = ()=>{
-    login ? setLogin(false) : setLogin(true)
+
+  const setLoginModal = (bool)=>{
+    if(bool){
+      cookies.remove('token')
+      setloginAdmin(true)
+    }else{
+      login ? setLogin(false) : setLogin(true)
+    }
+    
   }
 
   const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
-      setLoginModal();
+      setLoginModal(true);
       Axios.post('http://127.0.0.1:8000/login',data
             ).then((res) => {
-              const token = res.data;
-              window.location.reload()
-              cookies.set('token', token, { path: '/' });
-              
-              console.log();
+              if(res.data === false){
+                alert("아이디와 비밀번호를 확인해주세요")
+              }else{
+                const token = res.data;
+                window.location.reload()
+                cookies.set('token', token, { path: '/' });
+                setloginAdmin(false)
+              }
             }).catch((err) => {
 
             });
@@ -124,8 +135,8 @@ function Header(){
                   </Link>
                 </Section>
                 
-                <LoginSection onClick={()=>setLoginModal()}>
-                {cookies.get('token') === undefined ? `Login` : `admin`}
+                <LoginSection onClick={()=>setLoginModal(cookies.get('token') === undefined ? false : true)}>
+                {loginAdmin ? `Login` : `admin`}
                 </LoginSection>
           </Wrap>
           <LoginDiv login={login}>

@@ -116,7 +116,8 @@ import Footer from './Footer';
     font-weight: 550;
   `
   const PageLi = styled.li`
-    display:flex;  
+    display:flex;
+    height:100px;
     justify-content: center;
     align-items: center;
   `
@@ -183,7 +184,7 @@ import Footer from './Footer';
   const cookies = new Cookies();
   const [loadingList, setLoadingList] = useState(true);
 
-  setTimeout(()=>setLoadingList(false),2000)
+  
 
 
   //Category 파라미터 전달 받아 Search 데이터 입력
@@ -225,7 +226,7 @@ import Footer from './Footer';
         Category: Search.Category
       }
     }).then((response)=>{
-      
+        setTimeout(()=>setLoadingList(false),2000)
         settotalposts(response.data);
         const indexOfLast = currentPage * postsPerPage;
         const indexOfFirst = indexOfLast - postsPerPage;

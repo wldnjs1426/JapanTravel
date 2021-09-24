@@ -8,7 +8,6 @@ const Div = styled.div`
     justify-content: space-around;
     align-items:center;
     background-color: #ececec;
-    border:1px solid gray;
 `
 const Ul = styled.ul`
     width:500px;

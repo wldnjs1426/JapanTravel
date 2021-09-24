@@ -8,6 +8,8 @@ const cors = require('cors');
 const mysql = require('mysql');
 const PORT = process.env.port || 8000;
 
+
+
 //DB접속
 const db = mysql.createPool({
     host: "3.38.97.219",
@@ -103,6 +105,9 @@ app.post("/login", (req, res)=>{
     var password = req.body.password;
     const sqlQuery = "SELECT * FROM login WHERE id='"+id+"' AND password="+password+"";
     db.query(sqlQuery, (err, result)=>{
+        if(err !== null){
+            res.send(false)
+        }
         let token = jwt.sign({ name: 'admin', exp: parseInt(Date.now() / 1000) + (60 * 60) }, KEY); // 만료기간 10초
 	    res.send(token);
         
@@ -130,7 +135,7 @@ const upload = multer({
 app.post("/Create",upload.single("img"),(req,res)=>{
     
     var fs = require('fs');
-    var testFolder = './public/image/Thumbnail_img';
+    var testFolder = './image/Thumbnail_img';
 
     fs.readdir(testFolder, function(error, filelist){
 
