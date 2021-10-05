@@ -194,15 +194,15 @@ import Footer from './Footer';
     Area : "null",
     Category : categoryParam
   })
-  const [Arcd, setArcd] = useState([])
-  const [Cacd, setCacd] = useState([])
+  const [Arcd, setArcd] = useState()
+  const [Cacd, setCacd] = useState()
   const [areaKorea, setareaKorea] = useState("전체")
   const [categoryKorea, setcategoryKorea] = useState("관광지")
 
   //Paging
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
-  const [totalposts, settotalposts] = useState([]);
+  const [totalposts, settotalposts] = useState();
   
   //Map
   let lat = 0 ;
@@ -220,26 +220,28 @@ import Footer from './Footer';
     
   //DB연동 후 조건에 맞는 쿼리문 입력 후 데이터 출력
   useEffect(()=>{
-    Axios.get('http://127.0.0.1:8000/tour',{
+    var setLoading = setTimeout(()=>setLoadingList(false),2000)
+    Axios.get('http://3.35.139.12:5000/tour',{
       params: {
         Area: Search.Area,
         Category: Search.Category
       }
     }).then((response)=>{
-      setTimeout(()=>setLoadingList(false),2000)
         settotalposts(response.data);
         const indexOfLast = currentPage * postsPerPage;
         const indexOfFirst = indexOfLast - postsPerPage;
         setAreadata(response.data.slice(indexOfFirst, indexOfLast))
     })
+    return () => clearTimeout(setLoading);
+
   },[Search, currentPage])
 
   //지역,카테고리 select 박스 동적 생성
   useEffect(()=>{
-    Axios.get('http://127.0.0.1:8000/tour/Area').then((response)=>{
+    Axios.get('http://3.35.139.12:5000/tour/Area').then((response)=>{
         setArcd(response.data);        
     })
-    Axios.get('http://127.0.0.1:8000/tour/Category').then((response)=>{
+    Axios.get('http://3.35.139.12:5000/tour/Category').then((response)=>{
       setCacd(response.data);
     })
       
@@ -294,7 +296,6 @@ return(
                     {Arcd.map(data => 
                     (
                       <option  key={data.id} value={data.detail_cd +`,`+ data.detail_nm} >{data.detail_nm}</option>
-                      
                     ))}
                   </Select>
                 </SubArticle>
@@ -306,7 +307,7 @@ return(
                   <option value="null">===선택해 주세요===</option>
                   {/* 카테고리 데이터 length만큼 반복해서 데이터 출력 */}
                   {Cacd.map(data => (
-                      <option  key={data.category_id} value={data.target_table +`,`+ data.category_nm}>{data.category_nm}</option>
+                      <option  key={data.id} value={data.target_table +`,`+ data.category_nm}>{data.category_nm}</option>
                     ))}
                   </Select>
                 </SubArticle>
@@ -321,8 +322,8 @@ return(
                 {/* DB리스트 length만큼 반복해서 데이터 출력 */}
                 {
                 Areadata.map(data => (
-                      <Link className="list" to={`/detail/${data.id}/${Search.Category}/${data.Area}/${data.detail_nm}`}>
-                        <Li key={data.id} onMouseOver={()=>mouseHover(data.id)} >
+                      <Link key={data.id} className="list" to={`/detail/${data.id}/${Search.Category}/${data.Area}/${data.detail_nm}`}>
+                        <Li onMouseOver={()=>mouseHover(data.id)} >
                           <ImgDiv>
                             <Img src={`${data.Thumbnail_img}`} alt={data.Tourlist_name} />
                           </ImgDiv>

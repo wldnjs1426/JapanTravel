@@ -6,13 +6,13 @@ const app = express();
 const path = require("path");
 const cors = require('cors');
 const mysql = require('mysql');
-const PORT = process.env.port || 8000;
+const PORT = process.env.port || 5000;
 
 
 
 //DB접속
 const db = mysql.createPool({
-    host: "3.38.97.219",
+    host: "3.35.139.12",
     user: "root",
     password: "rose1991",
     database: "japan"
@@ -43,7 +43,7 @@ app.get("/detailC", (req, res)=>{
     var id = req.query.id
     var Category = req.query.Category
 
-    let sqlQuery = "SELECT japan_code.category_nm FROM "+Category+" INNER JOIN japan_code ON "+Category+".Category_code=japan_code.Category_code WHERE "+Category+".id="+id+";"    
+    let sqlQuery = "SELECT * FROM "+Category+" INNER JOIN japan_code ON "+Category+".Category_code=japan_code.Category_code WHERE "+Category+".id="+id+";"    
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
     });
@@ -51,7 +51,7 @@ app.get("/detailC", (req, res)=>{
 app.get("/detailA", (req, res)=>{
     var Area = req.query.Area
 
-    let sqlQuery = "SELECT detail_nm FROM tourlist_code WHERE detail_cd = '"+Area+"'"    
+    let sqlQuery = "SELECT * FROM tourlist_code WHERE detail_cd = '"+Area+"'"    
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
     });

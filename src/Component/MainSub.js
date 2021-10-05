@@ -50,11 +50,14 @@ function MainSub(){
 
     //Axios로 데이터베이스 접근 
     useEffect(()=>{
-        Axios.get('http://127.0.0.1:8000/tour/Category').then((response)=>{
+        Axios.get('http://3.35.139.12:5000/tour/Category').then((response)=>{
     //가져온 데이터를 Category 데이터로 선언
         setCategory(response.data);
     })
     },[])
+
+    
+
 
     return(
             <Div>
@@ -62,7 +65,7 @@ function MainSub(){
                 {/* map함수로 length만큼 반복 */}
                 <MenuDiv >
                     {Category.map(data => (
-                        <Link key={data.category_id} to={`/map/${data.target_table}`}>
+                        <Link key={data.id} to={`/map/${data.target_table}`}>
                             <Section>
                                 <img src={`/image/icon/${data.target_table}.png`} alt={data.target_table} />
                                 {data.target_table.toUpperCase()}

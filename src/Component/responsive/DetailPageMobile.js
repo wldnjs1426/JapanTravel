@@ -97,7 +97,7 @@ function DetailPage({match}) {
     const area = match.params.Area
 
     useEffect(()=>{
-        Axios.get('http://127.0.0.1:8000/detail',{
+        Axios.get('http://3.35.139.12:5000/detail',{
         params: {
             id: id,
             Category: category

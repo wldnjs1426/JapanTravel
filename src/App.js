@@ -32,7 +32,7 @@ function App() {
     
     
     <BrowserRouter>
-      <div id="wrap">
+
       {isTablet ? <HeaderMobile />   : <Header /> } 
       <Route
           render={({ location }) => {
@@ -51,7 +51,8 @@ function App() {
             );
           }}
         ></Route>
-      </div>
+        
+
     </BrowserRouter>
   );
 }

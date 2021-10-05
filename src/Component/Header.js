@@ -94,23 +94,25 @@ function Header(){
 
   const cookies = new Cookies();
   const [login,setLogin] = useState(false)
-  const [loginAdmin,setloginAdmin] = useState()
+  const [loginAdmin,setloginAdmin] = useState(cookies.get('token') === undefined ? true : false)
 
+
+  
 
   const setLoginModal = (bool)=>{
+    window.scrollTo(0,0);
     if(bool){
       cookies.remove('token')
       setloginAdmin(true)
     }else{
       login ? setLogin(false) : setLogin(true)
     }
-    
   }
 
   const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
       setLoginModal(true);
-      Axios.post('http://127.0.0.1:8000/login',data
+      Axios.post('http://3.35.139.12:5000/login',data
             ).then((res) => {
               if(res.data === false){
                 alert("아이디와 비밀번호를 입력해주세요")
@@ -125,7 +127,6 @@ function Header(){
             });
     }
 
-
     return(
       <>
           <Wrap>
@@ -138,7 +139,9 @@ function Header(){
                 <LoginSection onClick={()=>setLoginModal(cookies.get('token') === undefined ? false : true)}>
                 {loginAdmin ? `Login` : `admin`}
                 </LoginSection>
+
           </Wrap>
+
           <LoginDiv login={login}>
 
             <LoginHeader >

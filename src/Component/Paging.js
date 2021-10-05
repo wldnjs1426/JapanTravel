@@ -9,7 +9,6 @@ const data = props.Areadata;
 const handlePageChange = (page) => {
     setPage(page);
     window.scrollTo(0, 0);
-    console.log(window)
     props.paginate(page);
   };
 let num = 0 ;

@@ -3,7 +3,7 @@ import Paging from '../Paging';
 import Loading from '../Loading';
 import { useForm } from "react-hook-form";
 import { Link,useParams } from "react-router-dom";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import FooterMobile from './FooterMobile';
 
@@ -139,7 +139,7 @@ import FooterMobile from './FooterMobile';
   
   //DB연동 후 조건에 맞는 쿼리문 입력 후 데이터 출력
   useEffect(()=>{
-    Axios.get('http://127.0.0.1:8000/tour',{
+    Axios.get('http://3.35.139.12:5000/tour',{
       params: {
         Area: Search.Area,
         Category: Search.Category
@@ -155,10 +155,10 @@ import FooterMobile from './FooterMobile';
 
   //지역,카테고리 select 박스 동적 생성
   useEffect(()=>{
-    Axios.get('http://127.0.0.1:8000/tour/Area').then((response)=>{
+    Axios.get('http://3.35.139.12:5000/tour/Area').then((response)=>{
         setArcd(response.data);        
     })
-    Axios.get('http://127.0.0.1:8000/tour/Category').then((response)=>{
+    Axios.get('http://3.35.139.12:5000/tour/Category').then((response)=>{
       setCacd(response.data);
     })
       
@@ -184,30 +184,12 @@ import FooterMobile from './FooterMobile';
     }
   };
 
-  const scrollRef = useRef();
-
-  const aa = ()=>{
-    console.log(scrollRef.current.scrollHeight)
-    console.log(window.scrollY)
-
-
-  }
-
-
-//   const { documentElement, body } = document;
-
-// const scrollHeight = document.documentElement.scrollHeight;
-// const clientHeight = document.documentElement.clientHeight;
-// const offsetHeight = documentElement.offsetHeight
-// const scrollTop = document.documentElement.scrollTop;
-
-
-//   console.log(scrollHeight,clientHeight,offsetHeight,scrollTop)
+  
 
 
 return( 
     <>
-      <Div ref={scrollRef} onClick={()=>aa()}>
+      <Div>
         <Form onSubmit={handleSubmit(onSubmit)}>
             <SearchSection>
               <SubSection>

@@ -152,7 +152,6 @@ function DetailPage({match}) {
     const area = match.params.Area
     const cookies = new Cookies();
 
-    console.log(cookies.get('token'))
 
 
     let CategoryKorea 
@@ -165,20 +164,20 @@ function DetailPage({match}) {
     }
 
     const deleteAction = ()=>{
-        Axios.get('http://127.0.0.1:8000/delete',{
+        Axios.get('http://3.35.139.12:5000/delete',{
         params: {
             id: id,
             category: category
         }
         }).then( ()=>{
             alert("삭제 되었습니다.")
-            window.location.href = "http://127.0.0.1:3000/map/tourlist";
+            window.location.href = "http://3.35.139.12:3000/map/tourlist";
 
         })
     }
 
     useEffect(()=>{
-        Axios.get('http://127.0.0.1:8000/detail',{
+        Axios.get('http://3.35.139.12:5000/detail',{
         params: {
             id: id,
             Category: category
@@ -188,7 +187,7 @@ function DetailPage({match}) {
         }).catch((error) =>{
             console.log(error)
         })
-        Axios.get('http://127.0.0.1:8000/detailC',{
+        Axios.get('http://3.35.139.12:5000/detailC',{
         params: {
             id: id,
             Category: category
@@ -196,7 +195,7 @@ function DetailPage({match}) {
         }).then((response)=>{
             setcategoryData(response.data);
         })
-        Axios.get('http://127.0.0.1:8000/detailA',{
+        Axios.get('http://3.35.139.12:5000/detailA',{
         params: {
             Area: area
         }
@@ -226,7 +225,7 @@ return(
                                 <li key={data.id}>{data.detail_nm}&nbsp;&nbsp;{`>`}&nbsp;&nbsp;</li>
                             ))}
                             {categoryData.map(data =>(
-                                <li key={data.id}>{data.category_nm}  </li>
+                                <li key={data.id}>{data.category_nm}</li>
                             ))}
                             
                             </Span>
