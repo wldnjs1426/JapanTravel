@@ -50,7 +50,7 @@ function MainSub(){
 
     //Axios로 데이터베이스 접근 
     useEffect(()=>{
-        Axios.get('http://3.35.139.12:5000/tour/Category').then((response)=>{
+        Axios.get('http://13.209.82.0:5000/tour/Category').then((response)=>{
     //가져온 데이터를 Category 데이터로 선언
         setCategory(response.data);
     })

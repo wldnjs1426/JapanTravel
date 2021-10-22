@@ -12,7 +12,7 @@ const PORT = process.env.port || 5000;
 
 //DB접속
 const db = mysql.createPool({
-    host: "3.35.139.12",
+    host: "13.209.82.0",
     user: "root",
     password: "rose1991",
     database: "japan"

@@ -139,7 +139,7 @@ import FooterMobile from './FooterMobile';
   
   //DB연동 후 조건에 맞는 쿼리문 입력 후 데이터 출력
   useEffect(()=>{
-    Axios.get('http://3.35.139.12:5000/tour',{
+    Axios.get('http://13.209.82.0:5000/tour',{
       params: {
         Area: Search.Area,
         Category: Search.Category
@@ -155,10 +155,10 @@ import FooterMobile from './FooterMobile';
 
   //지역,카테고리 select 박스 동적 생성
   useEffect(()=>{
-    Axios.get('http://3.35.139.12:5000/tour/Area').then((response)=>{
+    Axios.get('http://13.209.82.0:5000/tour/Area').then((response)=>{
         setArcd(response.data);        
     })
-    Axios.get('http://3.35.139.12:5000/tour/Category').then((response)=>{
+    Axios.get('http://13.209.82.0:5000/tour/Category').then((response)=>{
       setCacd(response.data);
     })
       

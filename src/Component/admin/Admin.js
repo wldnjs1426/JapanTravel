@@ -65,14 +65,14 @@ function Admin({match}){
         const formData = new FormData();
         formData.append("img", data.Thumbnail_img[0]);
         if(nullCheck){
-            Axios.post('http://3.35.139.12:5000/Create',data
+            Axios.post('http://13.209.82.0:5000/Create',data
             ).then((res) => {
                 alert("성공")
-                window.location.href='http://3.35.139.12:3000/map/tourlist'
+                window.location.href='http://13.209.82.0:3000/map/tourlist'
             }).catch((err) => {
                 alert("Error")
             });
-            Axios.post('http://3.35.139.12:5000/Create',formData
+            Axios.post('http://13.209.82.0:5000/Create',formData
             ).then((res) => {
 
             }).catch((err) => {

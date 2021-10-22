@@ -112,7 +112,7 @@ function Header(){
   const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
       setLoginModal(true);
-      Axios.post('http://3.35.139.12:5000/login',data
+      Axios.post('http://13.209.82.0:5000/login',data
             ).then((res) => {
               if(res.data === false){
                 alert("아이디와 비밀번호를 입력해주세요")
